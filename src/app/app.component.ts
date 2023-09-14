@@ -12,7 +12,8 @@ export class AppComponent implements AfterViewInit,OnInit{
 
   title = 'LpNews';
   public sources:any=[];
-  public article:any=[];
+  public articles:any=[];
+  public selectedNewsChannel:string="Top 10 Treading News!";
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
 
 
@@ -25,10 +26,12 @@ export class AppComponent implements AfterViewInit,OnInit{
   ngOnInit() {
       this.newApi.intitArticles().subscribe(
         (res:any)=>{
+          this.articles=res.articles;
           console.log(res);
-          this.article=res.article;
         }
       )
+
+
 
       this.newApi.initSources().subscribe(
       (res:any)=>{
@@ -68,4 +71,14 @@ export class AppComponent implements AfterViewInit,OnInit{
     getSources(){
 
     }
+
+  searchSource(source:any){
+    this.newApi.getArticleByid(source.id).subscribe(
+      (res:any)=>{
+        this.articles=res.articles
+        this.selectedNewsChannel=source.name
+      }
+    )
+
+  }
 }
